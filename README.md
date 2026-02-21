@@ -43,6 +43,8 @@ Uninstall:
 pacman -R bbr-classic-dkms
 ```
 
+<br />
+
 ## Load & activate
 
 ```sh
@@ -79,17 +81,7 @@ EOF
 sudo sysctl --system
 ```
 
-## All make targets
-
-```sh
-make                       # download tcp_bbr.c and build the module
-make clean                 # remove build directory and downloaded tcp_bbr.c
-sudo make load             # load module for testing (insmod)
-sudo make install          # install module permanently (no DKMS)
-sudo make uninstall        # remove permanently installed module
-sudo make dkms-install     # install via DKMS (auto-rebuild on kernel update)
-sudo make dkms-uninstall   # remove DKMS installation
-```
+<br />
 
 ## Testing performance
 
@@ -105,9 +97,11 @@ iperf3 -c <server> -C bbr_classic
 
 See also: [CachyOS/linux-cachyos#706] for benchmark results.
 
-## How it work
+<br />
 
-**Build `tcp_bbr_classic.c` from `tcp_bbr.c` source**
+## Technical Implementation
+
+Build `tcp_bbr_classic.c` from `tcp_bbr.c` source:
 
 - The unmodified BBRv1 source `tcp_bbr.c` is downloaded from the main Linux tree
 ```bash
@@ -147,6 +141,8 @@ fi
 ```
 
 The BBRv1 algorithm itself is untouched.
+
+<br />
 
 ## Credits
 
