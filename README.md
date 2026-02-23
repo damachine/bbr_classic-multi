@@ -104,41 +104,16 @@ See also: [CachyOS/linux-cachyos#706] for benchmark results.
 Build `tcp_bbr_classic.c` from `tcp_bbr.c` source:
 
 - The unmodified BBRv1 source `tcp_bbr.c` is downloaded from the main Linux tree
-```bash
-https://raw.githubusercontent.com/torvalds/linux/v$(MODVER)/net/ipv4/tcp_bbr.c
-```
- 
+
 Patches in `tcp_bbr_classic.c`:
 
 - renames string literal "bbr" to "bbr_classic" for new congestion control name
-```bash
-sed -i 's/"bbr"/"bbr_classic"/g' $(src_out)
-```
 
 - renames struct bbr to avoid symbol conflicts with in-tree BBRv3
-```bash
-sed -i 's/struct bbr/struct bbr_classic/g' $(src_out)
-```
 
 - replaces BTF kfunc registration with a no-op (CONFIG_DEBUG_INFO_BTF_MODULES compatibility)
-```bash
-sed -i 's/ret = register_btf_kfunc_id_set.*/ret = 0; \/\/ skip BTF kfunc registration (out-of-tree)/' $(src_out)
-```
 
 - checks for BBRv3 kernels
-```bash
-for candidate in "$(KDIR)/source/include/net/tcp.h" "$(KDIR)/include/net/tcp.h"; do
-  if [ -f "$$candidate" ]; then
-    header_file="$$candidate"
-    break
-  fi
-done
-	if [ -z "$$header_file" ]; then
-		$(KECHO) "WARN" "tcp.h not found, skipping min_tso_segs check" >&2
-	elif ! grep -q "min_tso_segs" "$$header_file"; then
-    sed -i 's/\.min_tso_segs/\/\/ .min_tso_segs/g' $(src_out)
-fi
-```
 
 The BBRv1 algorithm itself is untouched.
 
